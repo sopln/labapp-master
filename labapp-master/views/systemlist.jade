@@ -1,0 +1,116 @@
+extends layout
+
+block content
+  div.row  
+    div.col-xs-12.col-sm-6.col-md-7     
+      h1
+        | Systems
+    div.col-xs-6.col-md-5
+      h1#systemlist
+        button(data-toggle="modal", data-target="#addSystem").btn.btn-primary
+          | Add System
+        button.btn.btn-success
+          | Quick Check
+        script. 
+          var refresh = function() {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+              window.location.replace('/systems')
+            };
+            xhr.open('GET', '/systems/updateSystem', true);
+            xhr.send();
+            return false;
+          }
+        button(onclick="refresh();").btn.btn-warning
+          | Reload Servers
+        button.btn.btn-danger
+          | Force Shutdown
+      div(tabindex="-1", role="dialog", aria-labelledby="addSystemHead", aria-hidden="true", style="display: none;").modal.fade#addSystem
+        div.modal-dialog
+          div.modal-content
+            div.modal-header
+              button(type="button", data-dismiss="modal", aria-hidden="true").close
+                | x
+              h4#addSystemHead.modal-title
+                | Add System
+            div.modal-body
+                  label 
+                    | Name 
+                  input(type='text', placeholder='System Name' name='systemName').form-control#sysName
+                  label 
+                    | IP
+                  input(type='text', placeholder='System IP' name='systemIP').form-control#sysIP
+                  label
+                    | OS
+                  input(type='text', placeholder='Operating System' name='systemOS').form-control#sysOS
+                  label
+                    | Hostname
+                  input(type="text", placeholder='Hostname' name="systemHostname").form-control#sysHost
+            div.modal-footer
+              script.
+                var hitAdd = function() {
+                  var xhr = new XMLHttpRequest();
+                  xhr.onload = function(){
+                    window.location.replace('/systems');
+                  };
+                  xhr.open ('POST', '/systems/addSystem', true);
+                  xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                  var sysName = document.getElementById('sysName').value;
+                  var sysIP = document.getElementById('sysIP').value;
+                  var sysOS = document.getElementById('sysOS').value;
+                  var sysHost = document.getElementById('sysHost').value;
+                  var qString = 'systemName='+sysName+'&systemIP='+sysIP+'&systemOS='+sysOS+'&systemHostname='+sysHost;
+                  xhr.send(qString);
+                  return false;
+                }
+              button(type="button", onclick="hitAdd();").btn.btn-primary
+                | Submit
+
+  div.row
+    each system, i in systemlist
+      div.col-lg-4
+        div.panel.panel-primary
+          div.panel-heading
+            | #{system.name}
+          div.panel-body
+            table.table
+              tbody
+                tr
+                  th IP
+                  td #{system.ip}
+                tr
+                  th Hostname
+                  td #{system.hostname}
+                tr            
+                  th CPU
+                  td 
+                    div(style="position:relative;", id="cpuChart"+i)
+                    script.
+                          var leak = [ #{system.cpu} ];
+                          var datai = [];
+                          leak.forEach(function(dat){
+                            datai.push({time: dat.time, value: parseFloat(dat.value)})
+                          });
+                          new Morris.Line({
+                            element: 'cpuChart' + '#{i}', 
+                            data: datai, 
+                            xkey: 'time', 
+                            ykeys: ['value'], 
+                            labels: ['Value']
+                          });
+                          
+                tr
+                  th Open Files
+                  td #{system.openFiles}
+                tr
+                  th Users
+                  td #{system.users}
+                tr
+                  th Versions
+                    td 
+                      table.table.table-bordered
+                        tbody
+                          each ver, i in system.programmingVers
+                            tr 
+                              th #{ver.name} 
+                              td #{ver.version}

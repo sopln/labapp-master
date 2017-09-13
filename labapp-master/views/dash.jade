@@ -1,0 +1,97 @@
+extends layout
+
+block content
+  .row
+    .col-lg-12
+      h1.page-header Dashboard
+    // /.col-lg-12
+  // /.row
+  .row
+    .col-lg-3.col-md-6
+      .panel.panel-primary
+        .panel-heading
+          .row
+            .col-xs-3
+              i.fa.fa-comments.fa-5x
+            .col-xs-9.text-right
+              .huge #{totalUsers}
+              div Online Users
+        a(href='#')
+          .panel-footer
+            span.pull-left View Details
+            span.pull-right
+              i.fa.fa-arrow-circle-right
+            .clearfix
+    .col-lg-3.col-md-6
+      .panel.panel-green
+        .panel-heading
+          .row
+            .col-xs-3
+              i.fa.fa-tasks.fa-5x
+            .col-xs-9.text-right
+              .huge #{totalCpu}
+              div CPU Usage
+        a(href='#')
+          .panel-footer
+            span.pull-left View Details
+            span.pull-right
+              i.fa.fa-arrow-circle-right
+            .clearfix
+    .col-lg-3.col-md-6
+      .panel.panel-yellow
+        .panel-heading
+          .row
+            .col-xs-3
+              i.fa.fa-shopping-cart.fa-5x
+            .col-xs-9.text-right
+              .huge #{machinesUp}
+              div Machines Online
+        a(href='#')
+          .panel-footer
+            span.pull-left View Details
+            span.pull-right
+              i.fa.fa-arrow-circle-right
+            .clearfix
+    .col-lg-3.col-md-6
+      .panel.panel-red
+        .panel-heading
+          .row
+            .col-xs-3
+              i.fa.fa-support.fa-5x
+            .col-xs-9.text-right
+              .huge #{totalFiles}
+              div Files Open
+        a(href='#')
+          .panel-footer
+            span.pull-left View Details
+            span.pull-right
+              i.fa.fa-arrow-circle-right
+            .clearfix
+  // /.row
+  .row
+    .col-lg-8
+      .panel.panel-default
+        .panel-heading
+          i.fa.fa-bar-chart-o.fa-fw
+          |  Area Chart Example
+          .pull-right
+            .btn-group
+              button.btn.btn-default.btn-xs.dropdown-toggle(type='button', data-toggle='dropdown')
+                | Actions
+                span.caret
+              ul.dropdown-menu.pull-right(role='menu')
+                li
+                  a(href='#') Action
+                li
+                  a(href='#') Another action
+                li
+                  a(href='#') Something else here
+                li.divider
+                li
+                  a(href='#') Separated link
+        // /.panel-heading
+        .panel-body
+          #morris-area-chart
+        // /.panel-body
+      // /.panel
+
